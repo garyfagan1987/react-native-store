@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Dinero from 'dinero.js';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
-import {HeaderBackButton} from '@react-navigation/stack';
+import { HeaderBackButton } from '@react-navigation/stack';
 
 import { Context } from '../store/Context';
 import Button from '../components/Button';
@@ -13,27 +13,38 @@ export default function Details({ navigation }) {
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
-            headerLeft: () => <HeaderBackButton tintColor="#FFF" onPress={() => navigation.navigate('Listing')} label="Home" />,
+            headerLeft: () => (
+                <HeaderBackButton
+                    tintColor="#FFF"
+                    onPress={() => navigation.navigate('Listing')}
+                    label="Home"
+                />
+            ),
         });
-      }, [navigation]);
+    }, [navigation]);
 
     function removeFromBag(item) {
-        dispatch({type: 'REMOVE_FROM_BAG', payload: { item }});
+        dispatch({ type: 'REMOVE_FROM_BAG', payload: { item } });
     }
 
     return (
         <Container>
             {state.bag.items.length < 1 && (
                 <React.Fragment>
-                    <Text style={styles.empty}>Your bag is empty</Text>
-                    <Button onPress={() => navigation.navigate('Listing')} title="Start shopping" />
+                    <Text style={styles.empty}>
+                        Your bag is empty
+                    </Text>
+                    <Button
+                        onPress={() => navigation.navigate('Listing')}
+                        title="Start shopping"
+                    />
                 </React.Fragment>
             )}
             <FlatList
                 numColumns={1}
                 keyExtractor={(item) => item.uuid.toString()}
                 data={state.bag.items}
-                renderItem={({item, index}) => (
+                renderItem={({ item, index }) => (
                     <View style={(state.bag.items.length - 1 !== index) ? styles.divider : styles.flexRow}>
                         <Image
                             style={styles.image}
@@ -61,18 +72,23 @@ export default function Details({ navigation }) {
             {state.bag.items.length > 0 && (
                 <React.Fragment>
                     <View style={styles.totals}>
-                        <Text style={styles.totalText}>{quantity} {quantity > 1 ? 'Items' : 'Item'}</Text>
+                        <Text style={styles.totalText}>
+                            {quantity} {quantity > 1 ? 'Items' : 'Item'}
+                        </Text>
                         <Text style={styles.totalText}>
                             Total: {Dinero({ amount: state.bag.total, currency: 'GBP' }).toFormat('$0,0.00')}
                         </Text>
                     </View>
-                    <Button onPress={() => {
-                        if(state.user) {
-                            navigation.navigate('Pay');
-                        } else {
-                            navigation.navigate('Checkout');
-                        }
-                    }} title="Checkout" />
+                    <Button
+                        onPress={() => {
+                            if (state.user) {
+                                navigation.navigate('Pay');
+                            } else {
+                                navigation.navigate('Checkout');
+                            }
+                        }}
+                        title="Checkout"
+                    />
                 </React.Fragment>
             )}
         </Container>
@@ -129,4 +145,4 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
-  });
+});

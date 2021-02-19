@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Dinero from 'dinero.js';
-import axios from 'axios';
-
+import * as firebase from "firebase";
+import 'firebase/firestore';
 import {
     ActivityIndicator,
     FlatList,
@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 
 import { Context } from '../store/Context';
-import { payload } from '../requests/catalog';
 import Button from '../components/Button';
 import Container from '../components/Container';
 
@@ -24,19 +23,22 @@ export default function Listing({ navigation }) {
     React.useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <Button backgroundColor="transparent" onPress={() => navigation.navigate('Bag')} title={`Bag (${state.bag.items.length})`} />
+                <Button
+                    backgroundColor="transparent"
+                    onPress={() => navigation.navigate('Bag')}
+                    title={`Bag (${state.bag.items.length})`}
+                />
             ),
         });
     }, [navigation, state]);
 
     useEffect(() => {
-        axios({
-            method: "post",
-            url: "https://app.fakejson.com/q",
-            data: payload
-        }).then(function (resp) {
-            setIsLoading(false)
-            dispatch({ type: 'SET_CATALOG', payload: resp.data });
+        const db = firebase.firestore();
+
+        db.collection("catalog").get().then((querySnapshot) => {
+            const products = querySnapshot.docs.map(doc => doc.data());
+            setIsLoading(false);
+            dispatch({ type: 'SET_CATALOG', payload: products });
         });
     }, []);
 
@@ -44,7 +46,10 @@ export default function Listing({ navigation }) {
         <Container>
             {isLoading && (
                 <View style={styles.pending}>
-                    <ActivityIndicator size="large" color="#333" />
+                    <ActivityIndicator
+                        size="large"
+                        color="#333"
+                    />
                 </View>
             )}
             {!isLoading && (
@@ -59,12 +64,14 @@ export default function Listing({ navigation }) {
                                 id: item.id,
                             })}
                         >
-                            <View style={styles.card}>
+                            <View style={styles.item}>
                                 <Image
                                     style={styles.image}
                                     source={{ uri: item.image }}
                                 />
-                                <Text style={styles.text}>{item.name}</Text>
+                                <Text style={styles.text}>
+                                    {item.name}
+                                </Text>
                                 <Text style={styles.text}>
                                     {Dinero({ amount: item.price, currency: 'GBP' }).toFormat('$0,0.00')}
                                 </Text>
@@ -78,8 +85,9 @@ export default function Listing({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    card: {
+    item: {
         marginBottom: 25,
+        marginHorizontal: 15,
         flex: 1,
         alignItems: 'center',
     },
@@ -95,7 +103,7 @@ const styles = StyleSheet.create({
         height: 150,
     },
     pending: {
-		flex: 1,
-		justifyContent: 'center',
-	},
+        flex: 1,
+        justifyContent: 'center',
+    },
 });
