@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext } from "react";
 import * as firebase from "firebase";
 import "firebase/firestore";
 
@@ -9,11 +9,9 @@ export async function registration(email, password) {
         const currentUser = firebase.auth().currentUser;
 
         const db = firebase.firestore();
-        db.collection("users")
-            .doc(currentUser.uid)
-            .set({
-                email: currentUser.email,
-            });
+        db.collection("users").doc(currentUser.uid).set({
+            email: currentUser.email,
+        });
     } catch (err) {
         Alert.alert("There is something wrong!!!!", err.message);
     }
@@ -24,6 +22,6 @@ export async function loggingOut() {
     try {
         await firebase.auth().signOut();
     } catch (err) {
-        Alert.alert('There is something wrong!', err.message);
+        Alert.alert("There is something wrong!", err.message);
     }
 }

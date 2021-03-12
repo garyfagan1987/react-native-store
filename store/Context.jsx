@@ -1,6 +1,6 @@
-import React, {createContext, useReducer} from "react";
+import React, { createContext, useReducer } from "react";
 
-import Reducer from './Reducer';
+import Reducer from "./Reducer";
 
 const initialState = {
     bag: {
@@ -11,13 +11,13 @@ const initialState = {
     user: undefined,
 };
 
-const Store = ({children}) => {
+const Store = ({ children }) => {
     const [state, dispatch] = useReducer(Reducer, initialState);
     return (
         <Context.Provider value={[state, dispatch]}>
             {children}
         </Context.Provider>
-    )
+    );
 };
 
 export const Context = createContext(initialState);

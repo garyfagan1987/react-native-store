@@ -1,46 +1,49 @@
-import React, { useContext } from 'react';
-import Dinero from 'dinero.js';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React, { useContext } from "react";
+import Dinero from "dinero.js";
+import { Image, StyleSheet, Text, View } from "react-native";
 
-import { Context } from '../store/Context';
-import Button from '../components/Button';
-import Container from '../components/Container';
+import { Context } from "../store/Context";
+import Button from "../components/Button";
+import Container from "../components/Container";
 
 export default function Details({ navigation, route }) {
     const [state, dispatch] = useContext(Context);
     const { id } = route.params;
-    const item = state.catalog.find(x => x.id === id);
+    const item = state.catalog.find((x) => x.id === id);
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <Button backgroundColor="transparent" onPress={() => navigation.navigate('Bag')} title={`Bag (${state.bag.items.length})`} />
+                <Button
+                    backgroundColor="transparent"
+                    onPress={() => navigation.navigate("Bag")}
+                    title={`Bag (${state.bag.items.length})`}
+                />
             ),
         });
     }, [navigation, state]);
 
     function addToBag() {
-        dispatch({ type: 'ADD_TO_BAG', payload: [{ ...item, uuid: Math.floor(Math.random() * 90000) + 10000 }] });
-        navigation.navigate('Bag');
+        dispatch({
+            type: "ADD_TO_BAG",
+            payload: [
+                { ...item, uuid: Math.floor(Math.random() * 90000) + 10000 },
+            ],
+        });
+        navigation.navigate("Bag");
     }
 
     return (
         <Container>
             <View style={styles.center}>
-                <Image
-                    style={styles.image}
-                    source={{ uri: item.image }}
-                />
-                <Text style={styles.title}>
-                    {item.name}
-                </Text>
+                <Image style={styles.image} source={{ uri: item.image }} />
+                <Text style={styles.title}>{item.name}</Text>
                 <Text style={styles.price}>
-                    {Dinero({ amount: item.price, currency: 'GBP' }).toFormat('$0,0.00')}
+                    {Dinero({ amount: item.price, currency: "GBP" }).toFormat(
+                        "$0,0.00"
+                    )}
                 </Text>
-                <Button
-                    onPress={() => addToBag()}
-                    title="Add to Bag"
-                />
+                <Button onPress={() => addToBag()} title="Add to Bag" />
             </View>
         </Container>
     );
@@ -48,18 +51,18 @@ export default function Details({ navigation, route }) {
 
 const styles = StyleSheet.create({
     center: {
-        alignItems: 'center'
+        alignItems: "center",
     },
     title: {
-        color: '#333',
-        fontWeight: 'bold',
+        color: "#333",
+        fontWeight: "bold",
         fontSize: 25,
         marginVertical: 15,
-        textAlign: 'center',
+        textAlign: "center",
     },
     price: {
-        color: '#333',
-        fontWeight: 'bold',
+        color: "#333",
+        fontWeight: "bold",
         fontSize: 25,
         marginBottom: 15,
     },
