@@ -17,7 +17,7 @@ function Component({navigation}) {
         await firebase
             .auth()
             .signOut()
-            .then(() => navigation.navigate("Login"))
+            .then(() => navigation.navigate("LoginRegister"))
             .catch((error) => {
                 console.log(error);
             });

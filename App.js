@@ -1,11 +1,7 @@
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import * as firebase from "firebase";
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-import AccountNavigator from './screens/navigators/account';
-import ShopNavigator from './screens/navigators/shop';
+import Index from './index';
 
 import {
     API_KEY,
@@ -17,10 +13,7 @@ import {
     DATABASE_URL,
 } from "@env";
 
-
 import Store from "./store/Context";
-
-const Tab = createBottomTabNavigator();
 
 function App() {
     if (!firebase.apps.length) {
@@ -37,12 +30,7 @@ function App() {
 
     return (
         <Store>
-            <NavigationContainer>
-                <Tab.Navigator>
-                    <Tab.Screen name="Shop" component={ShopNavigator} />
-                    <Tab.Screen name="Account" component={AccountNavigator} />
-                </Tab.Navigator>
-            </NavigationContainer>
+            <Index />
         </Store>
     );
 }

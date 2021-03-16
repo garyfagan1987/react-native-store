@@ -1,5 +1,12 @@
 import React, { useContext } from "react";
-import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+    ActivityIndicator,
+    Alert,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from "react-native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import * as firebase from "firebase";
@@ -20,10 +27,10 @@ export default function Component({ handleSuccess }) {
         password: Yup.string().min(8).max(16).required("Required"),
     });
 
-    async function signIn(email, password) {
+    async function register(email, password) {
         await firebase
             .auth()
-            .signInWithEmailAndPassword(email, password)
+            .createUserWithEmailAndPassword(email, password)
             .then(() => {
                 dispatch({
                     type: "IS_LOADING",
@@ -37,7 +44,7 @@ export default function Component({ handleSuccess }) {
                     type: "IS_LOADING",
                     payload: false,
                 });
-
+                
                 Alert.alert("There was an error", error.message);
             });
     }
@@ -59,38 +66,40 @@ export default function Component({ handleSuccess }) {
                 payload: true,
             });
 
-            signIn(email, password);
+            register(email, password);
         },
     });
 
     return (
         <React.Fragment>
-            <View style={styles.group}>
-                <Text style={styles.label}>Email</Text>
-                <TextInput
-                    style={[
-                        styles.input,
-                        errors.email && styles.invalid,
-                    ]}
-                    onChangeText={handleChange("email")}
-                    onBlur={handleBlur("email")}
-                    value={values.email}
-                />
-            </View>
-            <View style={styles.group}>
-                <Text style={styles.label}>Password</Text>
-                <TextInput
-                    style={[
-                        styles.input,
-                        errors.password && styles.invalid,
-                    ]}
-                    onChangeText={handleChange("password")}
-                    onBlur={handleBlur("password")}
-                    value={values.password}
-                    secureTextEntry={true}
-                />
-            </View>
-            <Button onPress={handleSubmit} title="Login" />
+            {/* todo, add context for isLoading */}
+            {/* todo, add context for isLoading, with text */}
+            <React.Fragment>
+                <View style={styles.group}>
+                    <Text style={styles.label}>Email</Text>
+                    <TextInput
+                        style={[styles.input, errors.email && styles.invalid]}
+                        onChangeText={handleChange("email")}
+                        onBlur={handleBlur("email")}
+                        value={values.email}
+                    />
+                </View>
+                <View style={styles.group}>
+                    <Text style={styles.label}>Password</Text>
+                    <TextInput
+                        style={[
+                            styles.input,
+                            errors.password && styles.invalid,
+                        ]}
+                        onChangeText={handleChange("password")}
+                        onBlur={handleBlur("password")}
+                        value={values.password}
+                        secureTextEntry={true}
+                    />
+                </View>
+                <Button onPress={handleSubmit} title="Register" />
+            </React.Fragment>
+            {/* )} */}
         </React.Fragment>
     );
 }

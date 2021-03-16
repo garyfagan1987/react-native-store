@@ -1,7 +1,7 @@
 import React from "react";
 
 import Container from "../../components/Container";
-import LoginForm from "../../components/LoginForm";
+import RegisterForm from "../../components/RegisterForm";
 
 function Component({ navigation }) {
     function onSuccess() {
@@ -10,7 +10,7 @@ function Component({ navigation }) {
 
     return (
         <Container>
-            <LoginForm handleSuccess={onSuccess} />
+            <RegisterForm handleSuccess={onSuccess} />
         </Container>
     );
 }

@@ -34,10 +34,10 @@ const Reducer = (state, action) => {
                     total: 0,
                 },
             };
-        case "IS_LOGGING_IN":
+        case "IS_LOADING":
             return {
                 ...state,
-                isLoggingIn: action.payload,
+                isLoading: action.payload,
             };
         default:
             return state;

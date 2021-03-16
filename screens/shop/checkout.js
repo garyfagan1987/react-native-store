@@ -17,17 +17,13 @@ export default function Checkout({ navigation }) {
     return (
         <Container>
             <LoginForm handleSuccess={onSuccess} />
-            {!state.isLoggingIn && (
-                <React.Fragment>
-                    <View style={styles.divider}>
-                        <Button
-                            backgroundColor="secondary"
-                            onPress={() => navigation.navigate("Pay")}
-                            title="Continue as guest"
-                        />
-                    </View>
-                </React.Fragment>
-            )}
+            <View style={styles.divider}>
+                <Button
+                    backgroundColor="secondary"
+                    onPress={() => navigation.navigate("Pay")}
+                    title="Continue as guest"
+                />
+            </View>
         </Container>
     );
 }
