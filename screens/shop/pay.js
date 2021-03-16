@@ -13,14 +13,16 @@ import * as Yup from "yup";
 import * as firebase from "firebase";
 import "firebase/firestore";
 
-import { Context } from "../store/Context";
-import Button from "../components/Button";
-import Container from "../components/Container";
+import { Context } from "../../store/Context";
+import Button from "../../components/Button";
+import Container from "../../components/Container";
 
 export default function Pay({ navigation }) {
     const [state, dispatch] = useContext(Context);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const { user, bag } = state;
+
+    const user = firebase.auth().currentUser;
+    const { bag } = state;
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -45,7 +47,7 @@ export default function Pay({ navigation }) {
         email: Yup.string()
             .email()
             .when("dummy", {
-                is: () => user === undefined,
+                is: () => user === null,
                 then: Yup.string().required("Required"),
             }),
         cardNumber: Yup.string().min(16).max(16).required("Required"),
@@ -67,16 +69,19 @@ export default function Pay({ navigation }) {
 
             const db = firebase.firestore();
 
+            const uuid = Math.floor(Math.random() * 90000) + 10000;
+
             db.collection("orders")
                 .add({
-                    email: user ? user : values.email,
+                    email: user ? user.email : values.email,
                     isRegistered: user ? true : false,
                     items: bag.items,
                     total: bag.total,
+                    uuid,
                 })
-                .then((docRef) => {
+                .then(() => {
                     navigation.navigate("Confirmation", {
-                        orderNumber: docRef.id,
+                        orderNumber: uuid,
                     });
                     dispatch({ type: "EMPTY_BAG" });
                 })

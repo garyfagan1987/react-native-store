@@ -8,7 +8,7 @@ const initialState = {
         total: 0,
     },
     catalog: [],
-    user: undefined,
+    isLoggingIn: false,
 };
 
 const Store = ({ children }) => {

@@ -1,22 +1,13 @@
-import React, { useContext, useState } from "react";
-import {
-    ActivityIndicator,
-    Alert,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
-} from "react-native";
+import React, { useContext } from "react";
+import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, View } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import * as firebase from "firebase";
 
 import { Context } from "../store/Context";
 import Button from "../components/Button";
-import Container from "../components/Container";
 
-export default function Checkout({ navigation }) {
-    const [isLoggingIn, setIsLoggingIn] = useState(false);
+export default function Component({ handleSuccess }) {
     const [state, dispatch] = useContext(Context);
 
     const initialValues = {
@@ -33,16 +24,20 @@ export default function Checkout({ navigation }) {
         await firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                setIsLoggingIn(false);
+            .then(() => {
                 dispatch({
-                    type: "SIGN_IN_USER",
-                    payload: userCredential.user.email,
+                    type: "IS_LOGGING_IN",
+                    payload: false,
                 });
-                navigation.navigate("Pay");
+
+                handleSuccess();
             })
             .catch((error) => {
-                setIsLoggingIn(false);
+                dispatch({
+                    type: "IS_LOGGING_IN",
+                    payload: false,
+                });
+
                 Alert.alert("There was an error", error.message);
             });
     }
@@ -58,20 +53,25 @@ export default function Checkout({ navigation }) {
         initialValues,
         onSubmit: (values) => {
             const { email, password } = values;
-            setIsLoggingIn(true);
+
+            dispatch({
+                type: "IS_LOGGING_IN",
+                payload: true,
+            });
+
             signIn(email, password);
         },
     });
 
     return (
-        <Container>
-            {isLoggingIn && (
+        <React.Fragment>
+            {state.isLoggingIn && (
                 <View style={styles.pending}>
                     <ActivityIndicator size="large" color="#333" />
                     <Text style={styles.pendingText}>Logging in</Text>
                 </View>
             )}
-            {!isLoggingIn && (
+            {!state.isLoggingIn && (
                 <React.Fragment>
                     <View style={styles.group}>
                         <Text style={styles.label}>Email</Text>
@@ -101,30 +101,17 @@ export default function Checkout({ navigation }) {
                     <Button onPress={handleSubmit} title="Login" />
                 </React.Fragment>
             )}
-            {!isLoggingIn && (
-                <React.Fragment>
-                    <View style={styles.divider}>
-                        <Button
-                            backgroundColor="secondary"
-                            onPress={() => navigation.navigate("Pay")}
-                            title="Continue as guest"
-                        />
-                    </View>
-                </React.Fragment>
-            )}
-        </Container>
+        </React.Fragment>
     );
 }
 
+Component.defaultProps = {
+    handleSuccess: () => {},
+};
+
 const styles = StyleSheet.create({
-    divider: {
-        borderTopColor: "#DDD",
-        borderTopWidth: 1,
-        marginTop: 15,
-        paddingTop: 15,
-    },
     invalid: {
-        borderColor: "red",
+        borderColor: "#FF0000",
     },
     group: {
         marginBottom: 15,

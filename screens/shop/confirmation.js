@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import Button from "../components/Button";
-import Container from "../components/Container";
+import Button from "../../components/Button";
+import Container from "../../components/Container";
 
 export default function Confirmation({ navigation, route }) {
     const { orderNumber } = route.params;

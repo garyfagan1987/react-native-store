@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import Dinero from "dinero.js";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-import { Context } from "../store/Context";
-import Button from "../components/Button";
-import Container from "../components/Container";
+import { Context } from "../../store/Context";
+import Button from "../../components/Button";
+import Container from "../../components/Container";
 
 export default function Details({ navigation, route }) {
     const [state, dispatch] = useContext(Context);

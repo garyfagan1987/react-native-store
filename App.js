@@ -1,7 +1,11 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import * as firebase from "firebase";
+
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+import AccountNavigator from './screens/navigators/account';
+import ShopNavigator from './screens/navigators/shop';
 
 import {
     API_KEY,
@@ -13,16 +17,10 @@ import {
     DATABASE_URL,
 } from "@env";
 
+
 import Store from "./store/Context";
 
-import Checkout from "./screens/checkout";
-import Bag from "./screens/bag";
-import Pay from "./screens/pay";
-import Confirmation from "./screens/confirmation";
-import Details from "./screens/details";
-import Listing from "./screens/listing";
-
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 function App() {
     if (!firebase.apps.length) {
@@ -40,41 +38,10 @@ function App() {
     return (
         <Store>
             <NavigationContainer>
-                <Stack.Navigator
-                    initialRouteName="Listing"
-                    screenOptions={{
-                        headerStyle: {
-                            backgroundColor: "#414288",
-                        },
-                        headerTintColor: "#FFF",
-                        headerTitleStyle: {
-                            fontWeight: "bold",
-                        },
-                    }}
-                >
-                    <Stack.Screen
-                        name="Listing"
-                        component={Listing}
-                        options={{ title: "M&C Store" }}
-                    />
-                    <Stack.Screen
-                        name="Details"
-                        component={Details}
-                        options={{ headerBackTitle: "Home" }}
-                    />
-                    <Stack.Screen
-                        name="Bag"
-                        component={Bag}
-                        options={{ headerBackTitle: "Home" }}
-                    />
-                    <Stack.Screen name="Checkout" component={Checkout} />
-                    <Stack.Screen name="Pay" component={Pay} />
-                    <Stack.Screen
-                        name="Confirmation"
-                        component={Confirmation}
-                        options={{ headerLeft: null }}
-                    />
-                </Stack.Navigator>
+                <Tab.Navigator>
+                    <Tab.Screen name="Shop" component={ShopNavigator} />
+                    <Tab.Screen name="Account" component={AccountNavigator} />
+                </Tab.Navigator>
             </NavigationContainer>
         </Store>
     );

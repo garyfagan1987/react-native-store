@@ -12,9 +12,9 @@ import {
     View,
 } from "react-native";
 
-import { Context } from "../store/Context";
-import Button from "../components/Button";
-import Container from "../components/Container";
+import { Context } from "../../store/Context";
+import Button from "../../components/Button";
+import Container from "../../components/Container";
 
 export default function Listing({ navigation }) {
     const [state, dispatch] = useContext(Context);

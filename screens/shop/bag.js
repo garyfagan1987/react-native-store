@@ -2,14 +2,17 @@ import React, { useContext } from "react";
 import Dinero from "dinero.js";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 import { HeaderBackButton } from "@react-navigation/stack";
+import * as firebase from "firebase";
 
-import { Context } from "../store/Context";
-import Button from "../components/Button";
-import Container from "../components/Container";
+import { Context } from "../../store/Context";
+import Button from "../../components/Button";
+import Container from "../../components/Container";
 
 export default function Details({ navigation }) {
     const [state, dispatch] = useContext(Context);
     const quantity = state.bag.items.length;
+
+    const user = firebase.auth().currentUser;
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -90,7 +93,7 @@ export default function Details({ navigation }) {
                     </View>
                     <Button
                         onPress={() => {
-                            if (state.user) {
+                            if (user) {
                                 navigation.navigate("Pay");
                             } else {
                                 navigation.navigate("Checkout");
