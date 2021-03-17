@@ -27,7 +27,7 @@ function Component() {
             <Stack.Screen
                 name="Listing"
                 component={Listing}
-                options={{ title: "M&C Store" }}
+                options={{ title: "Store" }}
             />
             <Stack.Screen
                 name="Details"
