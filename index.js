@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
 
 import { Context } from "./store/Context";
 
@@ -23,7 +24,27 @@ const Component = () => {
             )}
             {!state.isLoading && (
                 <NavigationContainer>
-                    <Tab.Navigator>
+                    <Tab.Navigator
+                        screenOptions={({ route }) => ({
+                            tabBarIcon: ({ focused, color, size }) => {
+                                let iconName;
+
+                                if (route.name === "Shop") {
+                                    iconName = "ios-cart";
+                                } else if (route.name === "Account") {
+                                    iconName = "ios-cog";
+                                }
+
+                                return (
+                                    <Ionicons
+                                        name={iconName}
+                                        size={size}
+                                        color={color}
+                                    />
+                                );
+                            },
+                        })}
+                    >
                         <Tab.Screen name="Shop" component={ShopNavigator} />
                         <Tab.Screen
                             name="Account"

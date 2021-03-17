@@ -3,8 +3,9 @@ import * as firebase from "firebase";
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import Container from "../../components/Container";
 import Button from "../../components/Button";
+import Container from "../../components/Container";
+import Divider from "../../components/Divider";
 
 function Component({ navigation }) {
     useFocusEffect(
@@ -23,6 +24,7 @@ function Component({ navigation }) {
                 onPress={() => navigation.navigate("Login")}
                 title="Login"
             />
+            <Divider />
             <Button
                 backgroundColor="secondary"
                 onPress={() => navigation.navigate("Register")}
