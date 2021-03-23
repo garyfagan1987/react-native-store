@@ -69,19 +69,16 @@ export default function Pay({ navigation }) {
 
             const db = firebase.firestore();
 
-            const uuid = Math.floor(Math.random() * 90000) + 10000;
-
             db.collection("orders")
                 .add({
                     email: user ? user.email : values.email,
-                    isRegistered: user ? true : false,
                     items: bag.items,
                     total: bag.total,
-                    uuid,
                 })
-                .then(() => {
+                .then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
                     navigation.navigate("Confirmation", {
-                        orderNumber: uuid,
+                        orderNumber: docRef.id,
                     });
                     dispatch({ type: "EMPTY_BAG" });
                 })

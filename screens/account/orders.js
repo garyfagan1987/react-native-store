@@ -24,7 +24,10 @@ function Component() {
             .where("email", "==", user.email)
             .get()
             .then((querySnapshot) => {
-                const orders = querySnapshot.docs.map((doc) => doc.data());
+                const orders = querySnapshot.docs.map((doc) =>
+                    Object.assign({ uid: doc.id }, doc.data())
+                );
+
                 setOrders(orders);
                 setIsLoading(false);
             });
@@ -43,13 +46,11 @@ function Component() {
             {!isLoading && orders.length > 0 && (
                 <FlatList
                     numColumns={1}
-                    keyExtractor={(item) => item.uuid.toString()}
+                    keyExtractor={(item) => item.toString()}
                     data={orders}
                     renderItem={({ item }) => (
                         <View style={styles.item}>
-                            <Text style={styles.text}>
-                                Order: {item.uuid.toString()}
-                            </Text>
+                            <Text style={styles.text}>Order: {item.uid}</Text>
                         </View>
                     )}
                 />

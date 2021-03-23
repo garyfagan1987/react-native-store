@@ -1,12 +1,6 @@
 import React, { useContext } from "react";
-import {
-    ActivityIndicator,
-    Alert,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
-} from "react-native";
+import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import PropTypes from "prop-types";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import * as firebase from "firebase";
@@ -14,11 +8,11 @@ import * as firebase from "firebase";
 import { Context } from "../store/Context";
 import Button from "../components/Button";
 
-export default function Component({ handleSuccess }) {
+export default function Component({ email, handleSuccess }) {
     const [state, dispatch] = useContext(Context);
 
     const initialValues = {
-        email: "",
+        email,
         password: "",
     };
 
@@ -44,7 +38,7 @@ export default function Component({ handleSuccess }) {
                     type: "IS_LOADING",
                     payload: false,
                 });
-                
+
                 Alert.alert("There was an error", error.message);
             });
     }
@@ -72,40 +66,37 @@ export default function Component({ handleSuccess }) {
 
     return (
         <React.Fragment>
-            {/* todo, add context for isLoading */}
-            {/* todo, add context for isLoading, with text */}
-            <React.Fragment>
-                <View style={styles.group}>
-                    <Text style={styles.label}>Email</Text>
-                    <TextInput
-                        style={[styles.input, errors.email && styles.invalid]}
-                        onChangeText={handleChange("email")}
-                        onBlur={handleBlur("email")}
-                        value={values.email}
-                    />
-                </View>
-                <View style={styles.group}>
-                    <Text style={styles.label}>Password</Text>
-                    <TextInput
-                        style={[
-                            styles.input,
-                            errors.password && styles.invalid,
-                        ]}
-                        onChangeText={handleChange("password")}
-                        onBlur={handleBlur("password")}
-                        value={values.password}
-                        secureTextEntry={true}
-                    />
-                </View>
-                <Button onPress={handleSubmit} title="Register" />
-            </React.Fragment>
-            {/* )} */}
+            <View style={styles.group}>
+                <Text style={styles.label}>Email</Text>
+                <TextInput
+                    style={[styles.input, errors.email && styles.invalid]}
+                    onChangeText={handleChange("email")}
+                    onBlur={handleBlur("email")}
+                    value={values.email}
+                />
+            </View>
+            <View style={styles.group}>
+                <Text style={styles.label}>Password</Text>
+                <TextInput
+                    style={[styles.input, errors.password && styles.invalid]}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                    value={values.password}
+                    secureTextEntry={true}
+                />
+            </View>
+            <Button onPress={handleSubmit} title="Register" />
         </React.Fragment>
     );
 }
 
+Component.propTypes = {
+    email: PropTypes.string,
+};
+
 Component.defaultProps = {
     handleSuccess: () => {},
+    email: undefined,
 };
 
 const styles = StyleSheet.create({
