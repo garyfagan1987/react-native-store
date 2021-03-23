@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
     ActivityIndicator,
     FlatList,
-    Text,
     StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
     View,
 } from "react-native";
 import * as firebase from "firebase";
@@ -11,7 +12,7 @@ import "firebase/firestore";
 
 import Container from "../../components/Container";
 
-function Component() {
+function Component({ navigation }) {
     const [isLoading, setIsLoading] = useState(true);
     const [orders, setOrders] = useState({});
 
@@ -46,12 +47,20 @@ function Component() {
             {!isLoading && orders.length > 0 && (
                 <FlatList
                     numColumns={1}
-                    keyExtractor={(item) => item.toString()}
+                    keyExtractor={(item) => item.uid.toString()}
                     data={orders}
                     renderItem={({ item }) => (
-                        <View style={styles.item}>
-                            <Text style={styles.text}>Order: {item.uid}</Text>
-                        </View>
+                        <TouchableWithoutFeedback
+                            onPress={() =>
+                                navigation.navigate("OrderDetails", {
+                                    id: item.uid,
+                                })
+                            }
+                        >
+                            <View style={styles.item}>
+                                <Text style={styles.text}>Order: {item.uid}</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
                     )}
                 />
             )}

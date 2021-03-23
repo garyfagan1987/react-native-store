@@ -7,6 +7,7 @@ import Account from '../account/home';
 import Login from '../account/login';
 import LoginRegister from '../account/loginRegister';
 import Orders from '../account/orders';
+import OrderDetails from '../account/orderDetails';
 import Register from '../account/register';
 import Settings from '../account/settings';
 
@@ -45,6 +46,10 @@ function Component() {
             <Stack.Screen
                 name="Orders"
                 component={Orders}
+            />
+            <Stack.Screen
+                name="OrderDetails"
+                component={OrderDetails}
             />
             <Stack.Screen
                 name="Settings"
